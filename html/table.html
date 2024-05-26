@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizualizacja</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        table {
+            color: white;
+            width: 100%;
+        }
+
+        th {
+            color: #e6434d;
+            text-align: left;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        tr {
+            padding: 8px;
+        }
+
+        td, th {
+	        padding-bottom: 2%;
+	        padding-top: 2%;
+            padding-left:2%;
+        }
+
+        tr:nth-child(even) {
+            background-color: #212020;
+        }
+    </style>
+</head>
+
+<body >
+    <table id="country-table" >
+        <thead>
+        <tr>
+            <th>Kraj</th>
+            <th onclick="sort(1)" style="cursor: pointer;">Zdrowie</th>
+            <th onclick="sort(2)" style="cursor: pointer;">Mediana</th>
+            <th onclick="sort(3)" style="cursor: pointer;">Samobójstwa</th>
+            <th onclick="sort(4)" style="cursor: pointer;">Rezultat</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+<script>
+    const data = [
+  {
+    "country": "India",
+    "healthRank": 66.16,
+    "medianIncome": 1314,
+    "suicideRate": 12.7,
+    "result": 4.114638114660605
+  },
+  {
+    "country": "China",
+    "healthRank": 83.11,
+    "medianIncome": 4246,
+    "suicideRate": 8.1,
+    "result": 11.260072114556136
+  },
+  {
+    "country": "United States",
+    "healthRank": 73.26,
+    "medianIncome": 31974,
+    "suicideRate": 16.1,
+    "result": 8.230716126529597
+  },
+  {
+    "country": "Pakistan",
+    "healthRank": 60.78,
+    "medianIncome": 1797,
+    "suicideRate": 8.9,
+    "result": 5.420694274495507
+  },
+  {
+    "country": "Nigeria",
+    "healthRank": 50.12,
+    "medianIncome": 1021,
+    "suicideRate": 3.5,
+    "result": 12.30828079609491
+  },
+  {
+    "country": "Brazil",
+    "healthRank": 71.68,
+    "medianIncome": 7001,
+    "suicideRate": 6.9,
+    "result": 12.090443131408371
+  },
+  {
+    "country": "Bangladesh",
+    "healthRank": 67.39,
+    "medianIncome": 1414,
+    "suicideRate": 3.7,
+    "result": 21.77006504890492
+  },
+  {
+    "country": "Russia",
+    "healthRank": 71.38,
+    "medianIncome": 11709,
+    "suicideRate": 25.1,
+    "result": 3.171928689960682
+  },
+  {
+    "country": "Ethiopia",
+    "healthRank": 60.91,
+    "medianIncome": 1107,
+    "suicideRate": 5.4,
+    "result": 9.954490823671279
+  },
+  {
+    "country": "Mexico",
+    "healthRank": 73.09,
+    "medianIncome": 5099,
+    "suicideRate": 5.3,
+    "result": 16.604636853705156
+  },
+  {
+    "country": "Japan",
+    "healthRank": 86.5,
+    "medianIncome": 18162,
+    "suicideRate": 15.3,
+    "result": 7.837657766575732
+  },
+  {
+    "country": "Philippines",
+    "healthRank": 70.06,
+    "medianIncome": 3219,
+    "suicideRate": 2.2,
+    "result": 78.83229379251135
+  },
+  {
+    "country": "Egypt",
+    "healthRank": 67.2,
+    "medianIncome": 1847,
+    "suicideRate": 3,
+    "result": 32.37542633398864
+  },
+  {
+    "country": "DR Congo",
+    "healthRank": 50.9,
+    "medianIncome": 548,
+    "suicideRate": 6.7,
+    "result": 4.7364979200451245
+  },
+  {
+    "country": "Vietnam",
+    "healthRank": 76.99,
+    "medianIncome": 3881,
+    "suicideRate": 7.5,
+    "result": 10.93167634847116
+  },
+  {
+    "country": "Iran",
+    "healthRank": 74.93,
+    "medianIncome": 5924,
+    "suicideRate": 5.2,
+    "result": 18.17142520518912
+  },
+  {
+    "country": "Turkey",
+    "healthRank": 74.19,
+    "medianIncome": 7267,
+    "suicideRate": 2.4,
+    "result": 76.7926492681907
+  },
+  {
+    "country": "Germany",
+    "healthRank": 81.41,
+    "medianIncome": 24046,
+    "suicideRate": 12.3,
+    "result": 10.554700330378111
+  },
+  {
+    "country": "Thailand",
+    "healthRank": 78.92,
+    "medianIncome": 5670,
+    "suicideRate": 8.8,
+    "result": 9.8469696725759
+  },
+  {
+    "country": "Tanzania",
+    "healthRank": 60.07,
+    "medianIncome": 992,
+    "suicideRate": 4.3,
+    "result": 13.388385921814876
+  },
+  {
+    "country": "United Kingdom",
+    "healthRank": 78.31,
+    "medianIncome": 20035,
+    "suicideRate": 7.9,
+    "result": 15.855776468718544
+  },
+  {
+    "country": "France",
+    "healthRank": 80.46,
+    "medianIncome": 20951,
+    "suicideRate": 13.8,
+    "result": 8.634880790013064
+  },
+  {
+    "country": "South Africa",
+    "healthRank": 59.9,
+    "medianIncome": 4081,
+    "suicideRate": 23.5,
+    "result": 1.9909466518012544
+  },
+  {
+    "country": "Italy",
+    "healthRank": 80.9,
+    "medianIncome": 18162,
+    "suicideRate": 6.7,
+    "result": 19.400234048158172
+  },
+  {
+    "country": "Kenya",
+    "healthRank": 65.21,
+    "medianIncome": 1197,
+    "suicideRate": 6.1,
+    "result": 9.696024524247317
+  },
+  {
+    "country": "Myanmar",
+    "healthRank": 66.74,
+    "medianIncome": 2296,
+    "suicideRate": 2.9,
+    "result": 34.93932546387227
+  },
+  {
+    "country": "Colombia",
+    "healthRank": 77.78,
+    "medianIncome": 5168,
+    "suicideRate": 3.9,
+    "result": 28.89137048697607
+  },
+  {
+    "country": "South Korea",
+    "healthRank": 84.8,
+    "medianIncome": 15772,
+    "suicideRate": 28.6,
+    "result": 3.7230432250680763
+  },
+  {
+    "country": "Uganda",
+    "healthRank": 58.49,
+    "medianIncome": 1166,
+    "suicideRate": 4.6,
+    "result": 11.549027412753668
+  },
+  {
+    "country": "Sudan",
+    "healthRank": 60.55,
+    "medianIncome": 1592,
+    "suicideRate": 3.8,
+    "result": 17.121980549270518
+  },
+  {
+    "country": "Spain",
+    "healthRank": 79.66,
+    "medianIncome": 17155,
+    "suicideRate": 7.7,
+    "result": 15.667646154641066
+  },
+  {
+    "country": "Iraq",
+    "healthRank": 64.62,
+    "medianIncome": 2293,
+    "suicideRate": 3.6,
+    "result": 21.97775836546938
+  },
+  {
+    "country": "Algeria",
+    "healthRank": 73.22,
+    "medianIncome": 2996,
+    "suicideRate": 2.5,
+    "result": 58.81801491435718
+  },
+  {
+    "country": "Argentina",
+    "healthRank": 74.45,
+    "medianIncome": 9041,
+    "suicideRate": 8.4,
+    "result": 10.609265783376818
+  },
+  {
+    "country": "Poland",
+    "healthRank": 76.31,
+    "medianIncome": 12932,
+    "suicideRate": 11.3,
+    "result": 8.556349766420647
+  },
+  {
+    "country": "Canada",
+    "healthRank": 78.88,
+    "medianIncome": 23991,
+    "suicideRate": 11.8,
+    "result": 10.736516050023829
+  },
+  {
+    "country": "Morocco",
+    "healthRank": 71.17,
+    "medianIncome": 3721,
+    "suicideRate": 7.2,
+    "result": 10.120561990374041
+  },
+  {
+    "country": "Ukraine",
+    "healthRank": 68.71,
+    "medianIncome": 5010,
+    "suicideRate": 21.6,
+    "result": 2.846594964551183
+  },
+  {
+    "country": "Angola",
+    "healthRank": 49.88,
+    "medianIncome": 1066,
+    "suicideRate": 6.1,
+    "result": 5.304308279789868
+  },
+  {
+    "country": "Uzbekistan",
+    "healthRank": 76.28,
+    "medianIncome": 752,
+    "suicideRate": 8,
+    "result": 8.930513928312813
+  },
+  {
+    "country": "Yemen",
+    "healthRank": 57.45,
+    "medianIncome": 1503,
+    "suicideRate": 5.8,
+    "result": 8.177474892105188
+  },
+  {
+    "country": "Mozambique",
+    "healthRank": 52.84,
+    "medianIncome": 947,
+    "suicideRate": 13.6,
+    "result": 2.3136593524846987
+  },
+  {
+    "country": "Ghana",
+    "healthRank": 63.08,
+    "medianIncome": 2422,
+    "suicideRate": 6.6,
+    "result": 8.710704993434096
+  },
+  {
+    "country": "Peru",
+    "healthRank": 75.81,
+    "medianIncome": 4413,
+    "suicideRate": 2.8,
+    "result": 50.139804470991024
+  },
+  {
+    "country": "Malaysia",
+    "healthRank": 77.35,
+    "medianIncome": 11976,
+    "suicideRate": 5.7,
+    "result": 19.805160104422768
+  },
+  {
+    "country": "Nepal",
+    "healthRank": 63.87,
+    "medianIncome": 1428,
+    "suicideRate": 9,
+    "result": 5.779830113234648
+  },
+  {
+    "country": "Madagascar",
+    "healthRank": 54.12,
+    "medianIncome": 567,
+    "suicideRate": 5.5,
+    "result": 7.213773825652369
+  },
+  {
+    "country": "Ivory Coast",
+    "healthRank": 51.81,
+    "medianIncome": 1358,
+    "suicideRate": 8.9,
+    "result": 3.719725400170683
+  },
+  {
+    "country": "Venezuela",
+    "healthRank": 69.61,
+    "medianIncome": 3741,
+    "suicideRate": 2.1,
+    "result": 92.83656533071064
+  },
+  {
+    "country": "Cameroon",
+    "healthRank": 51.02,
+    "medianIncome": 1841,
+    "suicideRate": 9,
+    "result": 3.669452875134636
+  },
+  {
+    "country": "Niger",
+    "healthRank": 54.6,
+    "medianIncome": 937,
+    "suicideRate": 5.3,
+    "result": 7.963589673914246
+  },
+  {
+    "country": "Australia",
+    "healthRank": 80.36,
+    "medianIncome": 23583,
+    "suicideRate": 12.5,
+    "result": 10.149695255701372
+  },
+  {
+    "country": "Syria",
+    "healthRank": 67.16,
+    "medianIncome": 2606,
+    "suicideRate": 2,
+    "result": 100.23339387837359
+  },
+  {
+    "country": "Mali",
+    "healthRank": 54.47,
+    "medianIncome": 861,
+    "suicideRate": 4.1,
+    "result": 11.512273203668448
+  },
+  {
+    "country": "Burkina Faso",
+    "healthRank": 58.72,
+    "medianIncome": 1002,
+    "suicideRate": 7.5,
+    "result": 5.959000874111237
+  },
+  {
+    "country": "Sri Lanka",
+    "healthRank": 76.58,
+    "medianIncome": 3162,
+    "suicideRate": 14,
+    "result": 5.0828990536315395
+  },
+  {
+    "country": "Malawi",
+    "healthRank": 61.01,
+    "medianIncome": 733,
+    "suicideRate": 5.4,
+    "result": 9.784960997316828
+  },
+  {
+    "country": "Zambia",
+    "healthRank": 57.2,
+    "medianIncome": 1045,
+    "suicideRate": 7.3,
+    "result": 5.839548796771719
+  },
+  {
+    "country": "Kazakhstan",
+    "healthRank": 72.23,
+    "medianIncome": 4313,
+    "suicideRate": 17.6,
+    "result": 3.7464096760898498
+  },
+  {
+    "country": "Chile",
+    "healthRank": 76.06,
+    "medianIncome": 9304,
+    "suicideRate": 9,
+    "result": 10.11371023774493
+  },
+  {
+    "country": "Romania",
+    "healthRank": 73.02,
+    "medianIncome": 8786,
+    "suicideRate": 9.7,
+    "result": 8.634867596006623
+  },
+  {
+    "country": "Chad",
+    "healthRank": 39.17,
+    "medianIncome": 1182,
+    "suicideRate": 6.4,
+    "result": 2.188804703684971
+  },
+  {
+    "country": "Ecuador",
+    "healthRank": 71.8,
+    "medianIncome": 5548,
+    "suicideRate": 7.6,
+    "result": 10.224715479262061
+  },
+  {
+    "country": "Guatemala",
+    "healthRank": 68.33,
+    "medianIncome": 3431,
+    "suicideRate": 5.9,
+    "result": 12.132394179307743
+  },
+  {
+    "country": "Senegal",
+    "healthRank": 64.44,
+    "medianIncome": 1137,
+    "suicideRate": 6,
+    "result": 9.660889750393146
+  },
+  {
+    "country": "Netherlands",
+    "healthRank": 82.05,
+    "medianIncome": 23422,
+    "suicideRate": 11.8,
+    "result": 11.019671130549312
+  },
+  {
+    "country": "Zimbabwe",
+    "healthRank": 55.46,
+    "medianIncome": 1429,
+    "suicideRate": 14.1,
+    "result": 2.5730280754760972
+  },
+  {
+    "country": "Guinea",
+    "healthRank": 48.65,
+    "medianIncome": 1036,
+    "suicideRate": 7,
+    "result": 4.134126540961121
+  },
+  {
+    "country": "Rwanda",
+    "healthRank": 64.6,
+    "medianIncome": 925,
+    "suicideRate": 5.6,
+    "result": 10.544757769901674
+  },
+  {
+    "country": "Benin",
+    "healthRank": 53.5,
+    "medianIncome": 989,
+    "suicideRate": 7.8,
+    "result": 4.593958912250079
+  },
+  {
+    "country": "Burundi",
+    "healthRank": 58.16,
+    "medianIncome": 640,
+    "suicideRate": 6.2,
+    "result": 7.28944777450769
+  },
+  {
+    "country": "Bolivia",
+    "healthRank": 66.02,
+    "medianIncome": 7136,
+    "suicideRate": 6.2,
+    "result": 12.38670654913553
+  },
+  {
+    "country": "Tunisia",
+    "healthRank": 72.05,
+    "medianIncome": 4076,
+    "suicideRate": 3.3,
+    "result": 33.101060358767526
+  },
+  {
+    "country": "Haiti",
+    "healthRank": 52.93,
+    "medianIncome": 1540,
+    "suicideRate": 9.6,
+    "result": 3.625512676198044
+  },
+  {
+    "country": "Belgium",
+    "healthRank": 80.6,
+    "medianIncome": 21444,
+    "suicideRate": 18.3,
+    "result": 6.3948726211451685
+  },
+  {
+    "country": "Dominican Republic",
+    "healthRank": 70.64,
+    "medianIncome": 5125,
+    "suicideRate": 4.9,
+    "result": 17.637733145203594
+  },
+  {
+    "country": "Jordan",
+    "healthRank": 68.92,
+    "medianIncome": 4025,
+    "suicideRate": 1.6,
+    "result": 554.0588675700279
+  },
+  {
+    "country": "South Sudan",
+    "healthRank": 35.69,
+    "medianIncome": 1121,
+    "suicideRate": 3.9,
+    "result": 2.5304433153069934
+  },
+  {
+    "country": "Honduras",
+    "healthRank": 69.1,
+    "medianIncome": 3694,
+    "suicideRate": 2.1,
+    "result": 91.56609707915433
+  },
+  {
+    "country": "Sweden",
+    "healthRank": 82.28,
+    "medianIncome": 21466,
+    "suicideRate": 14.7,
+    "result": 8.307873913006148
+  },
+  {
+    "country": "Papua New Guinea",
+    "healthRank": 52.87,
+    "medianIncome": 1162,
+    "suicideRate": 3,
+    "result": 18.99271264863143
+  },
+  {
+    "country": "Czech Republic",
+    "healthRank": 79.49,
+    "medianIncome": 14615,
+    "suicideRate": 12.2,
+    "result": 8.555652149217156
+  },
+  {
+    "country": "Azerbaijan",
+    "healthRank": 71.25,
+    "medianIncome": 3851,
+    "suicideRate": 4.1,
+    "result": 22.333144663743923
+  },
+  {
+    "country": "Tajikistan",
+    "healthRank": 72.46,
+    "medianIncome": 2437,
+    "suicideRate": 4.3,
+    "result": 20.23133798151262
+  },
+  {
+    "country": "Greece",
+    "healthRank": 77.43,
+    "medianIncome": 10516,
+    "suicideRate": 5.1,
+    "result": 22.27701320566332
+  },
+  {
+    "country": "Portugal",
+    "healthRank": 77.44,
+    "medianIncome": 13352,
+    "suicideRate": 11.5,
+    "result": 8.620936165668507
+  },
+  {
+    "country": "Hungary",
+    "healthRank": 76.7,
+    "medianIncome": 10921,
+    "suicideRate": 16.6,
+    "result": 5.304977667334314
+  },
+  {
+    "country": "United Arab Emirates",
+    "healthRank": 78.38,
+    "medianIncome": 28755,
+    "suicideRate": 6.4,
+    "result": 24.492602810907194
+  },
+  {
+    "country": "Belarus",
+    "healthRank": 74.34,
+    "medianIncome": 7359,
+    "suicideRate": 21.2,
+    "result": 3.5280687707816853
+  },
+  {
+    "country": "Israel",
+    "healthRank": 83.1,
+    "medianIncome": 14950,
+    "suicideRate": 5.3,
+    "result": 25.512138347576048
+  },
+  {
+    "country": "Togo",
+    "healthRank": 55.09,
+    "medianIncome": 964,
+    "suicideRate": 8.8,
+    "result": 4.240495934562771
+  },
+  {
+    "country": "Sierra Leone",
+    "healthRank": 48.26,
+    "medianIncome": 1004,
+    "suicideRate": 6.7,
+    "result": 4.262136960362153
+  },
+  {
+    "country": "Austria",
+    "healthRank": 80.23,
+    "medianIncome": 24214,
+    "suicideRate": 14.6,
+    "result": 8.611638619007007
+  },
+  {
+    "country": "Switzerland",
+    "healthRank": 82.11,
+    "medianIncome": 28142,
+    "suicideRate": 14.5,
+    "result": 9.505001689215304
+  },
+  {
+    "country": "Laos",
+    "healthRank": 66.38,
+    "medianIncome": 1389,
+    "suicideRate": 5.4,
+    "result": 11.93039415978082
+  },
+  {
+    "country": "Nicaragua",
+    "healthRank": 72.1,
+    "medianIncome": 4278,
+    "suicideRate": 4.4,
+    "result": 20.715239474567323
+  },
+  {
+    "country": "Serbia",
+    "healthRank": 71.93,
+    "medianIncome": 7019,
+    "suicideRate": 11.4,
+    "result": 6.6314545823708215
+  },
+  {
+    "country": "Paraguay",
+    "healthRank": 70.84,
+    "medianIncome": 6738,
+    "suicideRate": 6,
+    "result": 14.142286288769474
+  },
+  {
+    "country": "Kyrgyzstan",
+    "healthRank": 72.46,
+    "medianIncome": 2235,
+    "suicideRate": 7.4,
+    "result": 9.528889282867352
+  },
+  {
+    "country": "Bulgaria",
+    "healthRank": 74.11,
+    "medianIncome": 11271,
+    "suicideRate": 9.7,
+    "result": 9.448688478734526
+  },
+  {
+    "country": "Turkmenistan",
+    "healthRank": 75.59,
+    "medianIncome": 963,
+    "suicideRate": 5.7,
+    "result": 13.713778082763971
+  },
+  {
+    "country": "El Salvador",
+    "healthRank": 69.35,
+    "medianIncome": 4782,
+    "suicideRate": 6.1,
+    "result": 12.514366145015755
+  },
+  {
+    "country": "Republic of the Congo",
+    "healthRank": 54.1,
+    "medianIncome": 1375,
+    "suicideRate": 6.5,
+    "result": 6.107659823884605
+  },
+  {
+    "country": "Denmark",
+    "healthRank": 81.07,
+    "medianIncome": 23550,
+    "suicideRate": 10.7,
+    "result": 12.22822241435503
+  },
+  {
+    "country": "Central African Republic",
+    "healthRank": 31.95,
+    "medianIncome": 891,
+    "suicideRate": 12.3,
+    "result": 0.06718177287589826
+  },
+  {
+    "country": "Slovakia",
+    "healthRank": 76.74,
+    "medianIncome": 9505,
+    "suicideRate": 12.1,
+    "result": 7.279417361654235
+  },
+  {
+    "country": "Finland",
+    "healthRank": 81.19,
+    "medianIncome": 21469,
+    "suicideRate": 15.3,
+    "result": 7.84446242101886
+  },
+  {
+    "country": "Liberia",
+    "healthRank": 48.64,
+    "medianIncome": 945,
+    "suicideRate": 4.5,
+    "result": 7.510734126639577
+  },
+  {
+    "country": "Norway",
+    "healthRank": 82.98,
+    "medianIncome": 27032,
+    "suicideRate": 11.8,
+    "result": 11.87842236776098
+  },
+  {
+    "country": "Costa Rica",
+    "healthRank": 79.09,
+    "medianIncome": 8928,
+    "suicideRate": 8.1,
+    "result": 11.969033952809198
+  },
+  {
+    "country": "Lebanon",
+    "healthRank": 68.65,
+    "medianIncome": 9091,
+    "suicideRate": 2.8,
+    "result": 50.59330461153686
+  },
+  {
+    "country": "Ireland",
+    "healthRank": 80.04,
+    "medianIncome": 21177,
+    "suicideRate": 9.6,
+    "result": 13.103853957247424
+  },
+  {
+    "country": "Mauritania",
+    "healthRank": 56.74,
+    "medianIncome": 2094,
+    "suicideRate": 3.1,
+    "result": 22.181566150597288
+  },
+  {
+    "country": "Panama",
+    "healthRank": 75.1,
+    "medianIncome": 11268,
+    "suicideRate": 2.9,
+    "result": 56.256876617823224
+  },
+  {
+    "country": "Croatia",
+    "healthRank": 75.74,
+    "medianIncome": 11056,
+    "suicideRate": 16.4,
+    "result": 5.311610621193243
+  },
+  {
+    "country": "Georgia",
+    "healthRank": 70.64,
+    "medianIncome": 2814,
+    "suicideRate": 9.2,
+    "result": 7.1532119045403295
+  },
+  {
+    "country": "Mongolia",
+    "healthRank": 66.74,
+    "medianIncome": 3409,
+    "suicideRate": 17.9,
+    "result": 3.12618500149842
+  },
+  {
+    "country": "Uruguay",
+    "healthRank": 77.98,
+    "medianIncome": 9862,
+    "suicideRate": 21.2,
+    "result": 4.03698786961106
+  },
+  {
+    "country": "Moldova",
+    "healthRank": 70.57,
+    "medianIncome": 3590,
+    "suicideRate": 14.7,
+    "result": 4.290171076375917
+  },
+  {
+    "country": "Bosnia and Herzegovina",
+    "healthRank": 70.5,
+    "medianIncome": 7131,
+    "suicideRate": 10.9,
+    "result": 6.811671506524976
+  },
+  {
+    "country": "Gambia",
+    "healthRank": 56.18,
+    "medianIncome": 1784,
+    "suicideRate": 4.8,
+    "result": 10.335425166055144
+  },
+  {
+    "country": "Albania",
+    "healthRank": 73.95,
+    "medianIncome": 3979,
+    "suicideRate": 4.3,
+    "result": 22.08792777766746
+  },
+  {
+    "country": "Jamaica",
+    "healthRank": 73.83,
+    "medianIncome": 4429,
+    "suicideRate": 2.4,
+    "result": 69.60237308683358
+  },
+  {
+    "country": "Armenia",
+    "healthRank": 73.48,
+    "medianIncome": 2810,
+    "suicideRate": 3.3,
+    "result": 32.64582741790566
+  },
+  {
+    "country": "Botswana",
+    "healthRank": 59.07,
+    "medianIncome": 2907,
+    "suicideRate": 16.1,
+    "result": 2.7560712454711793
+  },
+  {
+    "country": "Lithuania",
+    "healthRank": 74.43,
+    "medianIncome": 15940,
+    "suicideRate": 26.1,
+    "result": 3.567955316246604
+  },
+  {
+    "country": "Namibia",
+    "healthRank": 60.64,
+    "medianIncome": 4023,
+    "suicideRate": 9.7,
+    "result": 5.443894253459087
+  },
+  {
+    "country": "Gabon",
+    "healthRank": 56.07,
+    "medianIncome": 3544,
+    "suicideRate": 8.4,
+    "result": 5.461875294362748
+  },
+  {
+    "country": "Lesotho",
+    "healthRank": 41.3,
+    "medianIncome": 1659,
+    "suicideRate": 72.4,
+    "result": 0.2045497411918441
+  },
+  {
+    "country": "Slovenia",
+    "healthRank": 79.88,
+    "medianIncome": 16644,
+    "suicideRate": 19.8,
+    "result": 5.264721565508663
+  },
+  {
+    "country": "North Macedonia",
+    "healthRank": 72.63,
+    "medianIncome": 5457,
+    "suicideRate": 9.4,
+    "result": 8.00722023384551
+  },
+  {
+    "country": "Latvia",
+    "healthRank": 74.52,
+    "medianIncome": 12958,
+    "suicideRate": 20.1,
+    "result": 4.386060154605308
+  },
+  {
+    "country": "Trinidad and Tobago",
+    "healthRank": 74.13,
+    "medianIncome": 3711,
+    "suicideRate": 8.7,
+    "result": 8.54350499561653
+  },
+  {
+    "country": "Estonia",
+    "healthRank": 77.71,
+    "medianIncome": 15637,
+    "suicideRate": 14.9,
+    "result": 6.82043652879477
+  },
+  {
+    "country": "Mauritius",
+    "healthRank": 71.86,
+    "medianIncome": 4969,
+    "suicideRate": 9.5,
+    "result": 7.6529954358906815
+  },
+  {
+    "country": "Cyprus",
+    "healthRank": 79.23,
+    "medianIncome": 19319,
+    "suicideRate": 3.6,
+    "result": 48.170537996761325
+  },
+  {
+    "country": "Eswatini",
+    "healthRank": 48.43,
+    "medianIncome": 2091,
+    "suicideRate": 29.4,
+    "result": 0.884711285561929
+  },
+  {
+    "country": "Djibouti",
+    "healthRank": 60.55,
+    "medianIncome": 1869,
+    "suicideRate": 9.6,
+    "result": 4.934136503277202
+  },
+  {
+    "country": "Comoros",
+    "healthRank": 59.6,
+    "medianIncome": 2050,
+    "suicideRate": 5.4,
+    "result": 10.029395961692519
+  },
+  {
+    "country": "Guyana",
+    "healthRank": 62.47,
+    "medianIncome": 2729,
+    "suicideRate": 40.3,
+    "result": 1.1412673698278635
+  },
+  {
+    "country": "Luxembourg",
+    "healthRank": 81.59,
+    "medianIncome": 34065,
+    "suicideRate": 11.3,
+    "result": 13.818198993621278
+  },
+  {
+    "country": "Suriname",
+    "healthRank": 60.8,
+    "medianIncome": 2593,
+    "suicideRate": 25.4,
+    "result": 1.7499140717812576
+  },
+  {
+    "country": "Montenegro",
+    "healthRank": 68.44,
+    "medianIncome": 6194,
+    "suicideRate": 21,
+    "result": 3.044625685258545
+  },
+  {
+    "country": "Malta",
+    "healthRank": 80.54,
+    "medianIncome": 20801,
+    "suicideRate": 6.1,
+    "result": 23.042545663300768
+  },
+  {
+    "country": "Belize",
+    "healthRank": 70.61,
+    "medianIncome": 3246,
+    "suicideRate": 7.1,
+    "result": 9.991887270994097
+  },
+  {
+    "country": "Iceland",
+    "healthRank": 82.72,
+    "medianIncome": 22988,
+    "suicideRate": 11.9,
+    "result": 10.909170088251232
+  },
+  {
+    "country": "Sao Tome and Principe",
+    "healthRank": 70.54,
+    "medianIncome": 1620,
+    "suicideRate": 1.5,
+    "result": 10.359375
+  },
+  {
+    "country": "Seychelles",
+    "healthRank": 77.44,
+    "medianIncome": 8121,
+    "suicideRate": 8.1,
+    "result": 11.385453761804785
+  }
+]
+
+    let currentSortColumn = 0;
+    let currentSortOrder = 'asc';
+
+    // Funkcja do tworzenia tabeli
+    async function createTable() {
+        const table = document.getElementById('country-table');
+
+        data.forEach((item) => {
+            const row = table.insertRow();
+
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
+            const cell4 = row.insertCell(3);
+            const cell5 = row.insertCell(4);
+
+            cell1.innerHTML = item.country;
+            cell2.innerHTML = item.healthRank;
+            cell3.innerHTML = item.medianIncome;
+            cell4.innerHTML = item.suicideRate;
+            cell5.innerHTML = item.result;
+        });
+    }
+
+    function sort(columnIndex) {
+        const sortOrder = columnIndex === currentSortColumn ? currentSortOrder === "desc" ? "asc": "desc" : 'desc';
+
+        currentSortColumn = columnIndex;
+        currentSortOrder = sortOrder;
+
+        const table = document.getElementById("country-table");
+        const rows = table.getElementsByTagName('tr');
+
+        const sortedRows = [];
+
+    // Rozpoczynamy od drugiego wiersza (indeks 1)
+    for (let i = 1; i < rows.length; i++) {
+        sortedRows.push(rows[i]);
+    }
+
+    // Sortowanie danych
+    sortedRows.sort(function(a, b) {
+        const aValue = parseFloat(a.getElementsByTagName('td')[columnIndex].innerHTML) || 0;
+        const bValue = parseFloat(b.getElementsByTagName('td')[columnIndex].innerHTML) || 0;
+
+        if (sortOrder === 'desc') {
+            return bValue - aValue;
+        } else {
+            return aValue - bValue;
+        }
+    });
+
+    // Aktualizacja tabeli
+    for (let i = 0; i < sortedRows.length; i++) {
+        table.appendChild(sortedRows[i]);
+    }
+}
+
+    window.onload = createTable;
+</script>
+</html>
