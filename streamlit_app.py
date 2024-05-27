@@ -3,8 +3,9 @@ import streamlit as st
 from streamlit_option_menu import option_menu # pip install streamlit-option-menu
 import streamlit.components.v1 as components
 
-with open('html/table.html', 'r') as table_file:
+with open('html/table.html', 'r')  as table_file, open("html/map.html", 'r') as map_file:
     table = table_file.read()
+    map_r = map_file.read()
 
 # Sidebar menu:
 with st.sidebar:
@@ -23,14 +24,20 @@ if selected == "Wprowadzenie, definicje":
     st.subheader("Analiza wybranych czynników i ich wpływ na liczbę samobójstw w krajach świata")
     st.markdown("Postanowiliśmy zacząć od zestawienia ze sobą wybranych czynników, zilustrowania wyników i próby zaobserwowania wzorców. Do analizy użyliśmy:")
 
-    st.markdown(" - health rank - indeks opieki zdrowotnej według magazynu CEOWorld jako analiza statystyczna ogólnej jakości systemu opieki zdrowotnej, w tym infrastruktury opieki zdrowotnej; kompetencji pracowników służby zdrowia (lekarzy, personelu pielęgniarskiego i innych pracowników służby zdrowia), kosztów (USD rocznie na mieszkańca); dostępności leków wysokiej jakości i gotowości rządu.")
+    st.markdown(" - **health rank** - indeks opieki zdrowotnej według magazynu CEOWorld jako analiza statystyczna ogólnej jakości systemu opieki zdrowotnej, w tym infrastruktury opieki zdrowotnej; kompetencji pracowników służby zdrowia (lekarzy, personelu pielęgniarskiego i innych pracowników służby zdrowia), kosztów (USD rocznie na mieszkańca); dostępności leków wysokiej jakości i gotowości rządu.")
     st.link_button("Źródło", "https://worldpopulationreview.com/country-rankings/best-healthcare-in-the-world")
 
-    st.markdown(" - median income - wskaźnik używany do określenia punktu środkowego rozkładu dochodów w danym kraju.")
+    st.markdown(" - **median income** - wskaźnik używany do określenia punktu środkowego rozkładu dochodów w danym kraju.")
     st.link_button("Źródło", "https://worldpopulationreview.com/country-rankings/median-income-by-country")
 
-    st.markdown(" - suicide rate - współczynnik liczby samobójstw na 100 tysięcy mieszkańców w danym kraju.")
+    st.markdown(" - **suicide rate** - współczynnik liczby samobójstw na 100 tysięcy mieszkańców w danym kraju.")
     st.link_button("Źródło", "https://worldpopulationreview.com/country-rankings/suicide-rate-by-country")
+
+    st.markdown(" - **result** - nasz własny czynnik opracowany na podstawie poniższego wzoru:")
+
+    st.latex(r'''
+    result = (healthRank + medianIncome) / suicideRate
+    ''')
 
     st.markdown("Przygotowane dane pochodzą z różnych źródeł i zbierane zostały w różnych okresach, "
                 "dlatego ta analiza nie jest w sobie wiarygodna, daje jednak możliwość prezentacji poszczególnych wyników.")
@@ -38,11 +45,12 @@ if selected == "Wprowadzenie, definicje":
 elif selected == "Mapa interaktywna":
     st.header("Interaktywna mapa ukazująca rezultaty z podziałem na kraje", divider='rainbow')
     st.markdown("Zebrane informacje postanowiliśmy nanieść na mapę świata:")
-    st.text("Najedź kursorem na wybrany kraj, żeby zobaczyć dokładne statystyki. ")
-    st.text("*Możesz również przybliżać mapę.")
+    st.text("Najedź kursorem na wybrany kraj, żeby zobaczyć dokładny wynik. ")
 
-    # DODAC MAPE
-    # components.html(interactive_mun, width=800, height=600)
+    components.html(map_r, width=700, height=380)
+
+    st.text("Ciemniejszy kolor oznacza wyższy rezultat* ")
+
 
 elif selected == "Tabela danych":
     st.header("Tabela przedstawiająca wyniki", divider='rainbow')
@@ -71,17 +79,26 @@ elif selected == "Sytuacja w Polsce":
     st.subheader("Liczba psychiatrów w Polsce")
 
     st.markdown("Choć ciężko dotrzeć do nowszych danych, możemy na podstawie dostępnych danych zauważyć, że sektor psychologii i psychiatrii w Polsce wymaga poprawy. "
-                "Jak podaje fundacja GROW Space, średni czas oczekiwania na konsultację psychiatry dziecięcego w Polsce w roku 2023 wynosił 237 dni. "
+                "Jak podaje fundacja GROW Space [4], średni czas oczekiwania na konsultację psychiatry dziecięcego w Polsce w roku 2023 wynosił 237 dni. "
                 "Dla ilustracji, to 237 dni:")
     st.image('images/calendar.png')
 
     st.markdown("Jest to spowodowane między innymi niewystarczającą liczbą specjalistów. "
-                "Według danych z [4], w Polsce w 2016 roku na 100 000 mieszkańców przypadało… 24 psychiatrów.")
+                "Według danych z [5], w Polsce w 2016 roku na 100 000 mieszkańców przypadało… 24 psychiatrów.")
     st.image('images/psychiatrists.png')
 
     st.markdown("Czy większa ich liczba polepszyłaby aktualną sytuację? Można tak sądzić. Czy jest o co walczyć? **Zdecydowanie.**")
 
-    st.markdown("Poniższa grafika przedstawia liczbę prób samobójczych (2193) w Polsce wśród dzieci i młodzieży do 18 roku życia. Czarne punkty symbolizują próby, które okazały się skuteczne (146).")
+    st.markdown("Poniższa grafika przedstawia liczbę prób samobójczych (2193) w Polsce wśród dzieci i młodzieży do 18 roku życia. Czarne punkty symbolizują próby, które okazały się skuteczne (146). [6]")
     st.image("images/suicides.png")
 
     st.markdown("Problem zdrowia psychicznego czy liczby samobójstw jest zbyt złożony aby wysunąć konkretne założenia co należałoby zmienić, aby sytuację naprawić, lecz można i należy dokładać wszelkich starań, bo każdy z nas pragnie żyć w zdrowym i szczęśliwym społeczeństwie.")
+
+    st.subheader("Źródła:")
+
+    st.markdown("1. [World Population Review - Healthcare](https://worldpopulationreview.com/country-rankings/best-healthcare-in-the-world)")
+    st.markdown("2. [World Population Review - Median Income](https://worldpopulationreview.com/country-rankings/median-income-by-country)")
+    st.markdown("3. [World Population Review - Suicide Rate](https://worldpopulationreview.com/country-rankings/suicide-rate-by-country)")
+    st.markdown("4. [Grow Space](https://pulsmedycyny.pl/rekordowe-kolejki-do-psychiatrow-dzieciecych-w-jednej-z-placowek-na-wizyte-trzeba-poczekac-do-2030-r-1194540)")
+    st.markdown("5. [Dane WHO](https://www.who.int/data/gho/data/themes/mental-health/suicide-rates)")
+    st.markdown("6. [Grow Space 2](https://politykazdrowotna.com/artykul/rekordowa-liczba-samobojstw/1214006)")
